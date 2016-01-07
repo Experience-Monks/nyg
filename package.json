@@ -35,10 +35,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/Jam3/nygi.git"
+    "url": "git://github.com/Jam3/nyg.git"
   },
-  "homepage": "https://github.com/Jam3/nygi",
+  "homepage": "https://github.com/Jam3/nyg",
   "bugs": {
-    "url": "https://github.com/Jam3/nygi/issues"
+    "url": "https://github.com/Jam3/nyg/issues"
   }
 }
