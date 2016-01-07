@@ -18,9 +18,10 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mkdir output && cd output && node ../test/index.js && cd ../"
+    "test": "mkdir output && cd output && node ../test/index.js && cd ../",
+    "postinstall": "node bin/track.js"
   },
-  "bin": "lib/cli.js",
+  "bin": "bin/cli.js",
   "keywords": [
     "project,",
     "generator,",
