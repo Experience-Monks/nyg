@@ -1,0 +1,43 @@
+{
+  "name": "nyg",
+  "version": "1.0.0",
+  "description": "Not another yeoman generator, a simplified project generator based around prompts and events.",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Nick Poisson",
+    "email": "nick@jam3.com",
+    "url": "https://github.com/njam3"
+  },
+  "dependencies": {
+    "configstore": "^1.4.0",
+    "glob": "^6.0.3",
+    "inquirer": "^0.11.1",
+    "markup-js": "^1.5.21",
+    "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mkdir output && cd output && node ../test/index.js && cd ../"
+  },
+  "bin": "lib/cli.js",
+  "keywords": [
+    "project,",
+    "generator,",
+    "yeoman",
+    "tool",
+    "build",
+    "cli",
+    "scaffold",
+    "dev",
+    "development"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Jam3/nygi.git"
+  },
+  "homepage": "https://github.com/Jam3/nygi",
+  "bugs": {
+    "url": "https://github.com/Jam3/nygi/issues"
+  }
+}
