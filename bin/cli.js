@@ -13,8 +13,9 @@ if (key==='--list') {
     list.choices = generators.map(function(cur) {
       return {name: cur, value: cur};
     });
+    list.choices.push({name: 'exit', value: 'exit'});
     inquirer.prompt(list,function(answer) {
-      runGenerator(answer.key);
+      if (answer.key!='exit') runGenerator(answer.key);
     });
   } else {
     console.log('No generators installed.')
