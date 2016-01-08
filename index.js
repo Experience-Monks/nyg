@@ -15,7 +15,6 @@ var nyg = function(prompts,globs) {
   });
   // Expose the copy function and config object for use outside
   this.config = store;
-  this.copy = template.copy;
   this._running = false;
   EventEmitter.call(this);
 };
@@ -35,6 +34,9 @@ nyg.prototype.end = function() {
   this._running = false;
   this.emit('complete');
 };
+nyg.prototype.copy = function(input,output,cb) {
+  template.copy(input,path.join(process.cwd(),output),cb);
+}
 /* Private Functions */
 nyg.prototype._resume = function() {
   this._running = true;
