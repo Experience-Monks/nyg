@@ -59,6 +59,15 @@ var nyg = require('nyg');
 nyg(prompts,globs).run();
 ```
 
+When running the actual generator, simply follow these steps:
+
+```bash
+npm i nyg -g
+npm i your-generator -g
+cd your/project/directory
+nyg your-generator
+```
+
 ## API
 
 
