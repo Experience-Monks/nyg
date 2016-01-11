@@ -13,7 +13,8 @@ var nyg = function(prompts,globs) {
     cur.base = path.join(origin,cur.base);
     return cur;
   });
-  // Expose the copy function and config object for use outside
+  // Expose the prompt function and config object for use outside
+  this.prompt = prompt;
   this.config = store;
   this._running = false;
   EventEmitter.call(this);
@@ -21,22 +22,27 @@ var nyg = function(prompts,globs) {
 nyg.prototype = Object.create(EventEmitter.prototype);
 /* Public Functions */
 nyg.prototype.run = function() {
+  this.cwd = process.cwd();
+  this.config.set('folder',path.basename(this.cwd));
   this._tasks = [this._runPrompts.bind(this),this._runTemplate.bind(this),this._runInstall.bind(this)];
   this._running = true;
   this._next();
+  return this;
 };
 nyg.prototype.async = function() {
   this._running = false;
-  return this.prototype._resume;
+  return this._resume.bind(this);
 };
 nyg.prototype.end = function() {
   this._tasks = [];
   this._running = false;
   this.emit('complete');
+  return this;
 };
 nyg.prototype.copy = function(input,output,cb) {
-  template.copy(input,path.join(process.cwd(),output),cb);
-}
+  template.copy(input,path.join(this.cwd,output),cb);
+  return this;
+};
 /* Private Functions */
 nyg.prototype._resume = function() {
   this._running = true;
@@ -60,16 +66,16 @@ nyg.prototype._runPrompts = function() {
 };
 nyg.prototype._runTemplate = function() {
   this.emit('precopy');
-  template(this._globs,process.cwd(),function() {
+  template(this._globs,this.cwd,function() {
     this.emit('postcopy');
     this._next();
-  });
+  }.bind(this));
 };
 nyg.prototype._runInstall = function() {
   this.emit('preinstall');
-  npm(function() {
+  npm(this.cwd,function() {
     this.emit('postinstall');
     this._next();
-  });
+  }.bind(this));
 };
 module.exports = nyg;
