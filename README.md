@@ -40,7 +40,7 @@ var prompts = [{
 }];
 ```
 
-The globs are simply identifiers for your template files. There are 3 properties to each glob base, glob, and output. The base property is the part of the path that will be removed when copied. The glob property is your file globs, it defaults to **/*. The output property is where you want to output the new files, defaults to '' which would be the the current working directory. All these properties get passed through the markup-js templating system as well, so you can use any of your variables within them.
+The globs are simply identifiers for your template files. There are 3 properties to each glob base, glob, and output. The base property is the part of the path that will be removed when copied. The glob property is your file globs, it defaults to **/*. The output property is where you want to output the new files, defaults to '' which would be the the current working directory. All these properties get passed through the [markup-js](https://www.npmjs.com/package/markup-js) template system as well, so you can use any of your variables within them.
 
 Here is an example of the glob options:
 
@@ -52,9 +52,9 @@ var globs = [
 ];
 ```
 
-The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache templating system. Please see the docs for all the things you can do with it.
+The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache template system. Please see the docs for all the things you can do with it.
 
-In its simplist form, this is all you have to do to get the nyg generator running.
+In its simplest form, this is all you have to do to get the nyg generator running.
 
 ```js
 var nyg = require('nyg');
@@ -76,8 +76,8 @@ nyg your-generator
 
 The main entry point to nyg. Returns an nyg instance.
 
-```prompts``` a single questions or an array of questions to ask the user, using [inquirer](https://www.npmjs.com/package/inquirer) syntax.
-```globs``` a single glob or an array of globs specifying which files to copy and to where.
+```prompts``` a single questions or an array of questions to ask the user, using [inquirer](https://www.npmjs.com/package/inquirer) syntax.  
+```globs``` a single glob or an array of globs specifying which files to copy and to where.  
 
 ### `nyg.run()`
 
@@ -87,8 +87,8 @@ Starts the generator.
 
 nyg extends an event emitter so all event emitter functions are exposed, although ```on``` will be the on you primarily use. Please see the [EventEmitter](https://nodejs.org/api/events.html) for further information.
 
-```event``` the event name.
-```function``` the function to call when the event is emitted.
+```event``` the event name.  
+```function``` the function to call when the event is emitted.  
 
 ### `nyg.async()`
 
@@ -112,16 +112,17 @@ Stops the generator, only call this if you want to cancel the generator prematur
 ### `nyg.prompt(prompt,callback)`
 
 Exposes the prompt function for use outside the generator, follows the same syntax as the constructor.
-```prompt``` A single prompt or an array of prompts.
-```callback``` a function to call when the prompting is done, returns an object with the user values assigned to the keys you defined.
+
+```prompt``` A single prompt or an array of prompts.  
+```callback``` a function to call when the prompting is done, returns an object with the user values assigned to the keys you defined.  
 
 ### `nyg.copy(input,output,callback)`
 
-Exposes the copy function for use outside the generator, input, output, and the content of input will ben run through the templating engine.
+Exposes the copy function for use outside the generator, input, output, and the content of input will ben run through the template engine.
 
-```input``` the input file.
-```output``` where to write the input file after it has been through the templating engine.
-```callback``` a function to call once the file has been written.
+```input``` the input file.  
+```output``` where to write the input file after it has been through the template engine.  
+```callback``` a function to call once the file has been written.  
 
 ### `nyg.config`
 
@@ -142,16 +143,17 @@ Returns the value specified via ```key```.
 ## Events
 
 nyg is an event emitter and will emit multiple events for you to react upon.
-```preprompt``` emitted before any prompting has happend.
-```postprompt``` emitted after prompts have been answered by the user.
-```precopy``` emitted before any files get run through the templating engine and outputted.
-```postcopy``` emitted after all the copying has been completed.
-```preinstall``` emitted before ```npm install``` has run.
-```postinstall``` emitted once npm has finished installing.
+
+```preprompt``` emitted before any prompting has happened.  
+```postprompt``` emitted after prompts have been answered by the user.  
+```precopy``` emitted before any files get run through the template engine and outputted.  
+```postcopy``` emitted after all the copying has been completed.  
+```preinstall``` emitted before ```npm install``` has run.  
+```postinstall``` emitted once npm has finished installing.  
 
 ## Test
 
-Running ```npm test``` will output the generator at ```test/index.js``` to the output folder. Please review ```test/index.js``` for a barebones generator setup.
+Running ```npm test``` will output the generator at ```test/index.js``` to the output folder. Please review ```test/index.js``` for a bare bones generator setup.
 
 ## License
 
