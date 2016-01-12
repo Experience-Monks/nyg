@@ -1,5 +1,6 @@
 'use strict';
-var path = require('path')
+var path = require('path');
+var mkdirp = require('mkdirp');
 var EventEmitter = require('events').EventEmitter;
 var template = require('./lib/template');
 var prompt = require('./lib/prompt');
@@ -40,7 +41,11 @@ nyg.prototype.end = function() {
   return this;
 };
 nyg.prototype.copy = function(input,output,cb) {
-  template.copy(input,path.join(this.cwd,output),cb);
+  output = template.parse(output);
+  mkdirp(path.dirname(output),function(err) {
+    if (err) throw err;
+    template.copy(template.parse(input),path.join(this.cwd,output),cb);
+  }.bind(this));
   return this;
 };
 /* Private Functions */
