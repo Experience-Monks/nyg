@@ -24,7 +24,7 @@ nyg.prototype = Object.create(EventEmitter.prototype);
 nyg.prototype.run = function() {
   this.cwd = process.cwd();
   this.config.set('folder',path.basename(this.cwd));
-  this._tasks = [this._runPrompts.bind(this),this._runTemplate.bind(this),this._runInstall.bind(this)];
+  this._tasks = [this._startPrompt.bind(this),this._runPrompt.bind(this),this._startTemplate.bind(this),this._runTemplate.bind(this),this._startInstall.bind(this),this._runInstall.bind(this)];
   this._running = true;
   this._next();
   return this;
@@ -57,19 +57,29 @@ nyg.prototype._next = function() {
     this.end();
   }
 };
-nyg.prototype._runPrompts = function() {
+nyg.prototype._startPrompt = function() {
   this.emit('preprompt');
+  this._next();
+};
+nyg.prototype._runPrompt = function() {
   prompt(this._prompts,function() {
     this.emit('postprompt');
     this._next();
   }.bind(this));
 };
-nyg.prototype._runTemplate = function() {
+nyg.prototype._startTemplate = function() {
   this.emit('precopy');
+  this._next();
+};
+nyg.prototype._runTemplate = function() {
   template(this._globs,this.cwd,function() {
     this.emit('postcopy');
     this._next();
   }.bind(this));
+};
+nyg.prototype._startInstall = function() {
+  this.emit('preinstall');
+  this._next();
 };
 nyg.prototype._runInstall = function() {
   this.emit('preinstall');

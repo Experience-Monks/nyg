@@ -1,2 +1,2 @@
-console.log({{project}});
+console.log('{{project}}');
 require('./option.js')();

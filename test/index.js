@@ -1,3 +1,7 @@
+var log = function(type) {
+  console.log(type);
+};
+
 var nyg = require('../');
 var prompts = [
   {
@@ -28,12 +32,14 @@ var prompts = [
 ];
 var globs = [{glob: '*', base: 'template/'},{base: 'template/{{option}}', glob: '*'}];
 var gen = nyg(prompts,globs);
-gen.on('preprompt',console.log);
-gen.on('postprompt',console.log);
-gen.on('precopy',console.log);
+gen.on('preprompt',log.bind(null,'preprompt'));
+gen.on('postprompt',log.bind(null,'postprompt'));
+gen.on('precopy',log.bind(null,'precopy'));
 gen.on('postcopy',function() {
+  log('postcopy');
   if (!gen.config.get('npm')) gen.end();
 });
-gen.on('preinstall',console.log);
-gen.on('postinstall',console.log);
+gen.on('preinstall',log.bind(null,'preinstall'));
+gen.on('postinstall',log.bind(null,'postinstall'));
 gen.run();
+

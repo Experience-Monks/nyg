@@ -6,6 +6,8 @@ Not another yeoman generator, simplified project generator base around prompts, 
 
 ## Usage
 
+[![NPM](https://nodei.co/npm/nyg.png)](https://www.npmjs.com/package/nyg)
+
 There are 3 basic things you need to use nyg: prompts (questions to ask before installing), globs (matching all your templates), and the templates themselves.
 
 The prompts are based on [inquirer](https://www.npmjs.com/package/inquirer). Please see the inquirer docs for the full amount of options available to you. These prompted questions get passed to your templates using [markup-js](https://www.npmjs.com/package/markup-js) with the corresponding keys you define as "name".
@@ -70,9 +72,86 @@ nyg your-generator
 
 ## API
 
+### `nyg(prompts,globs)`
 
+The main entry point to nyg. Returns an nyg instance.
 
-[![NPM](https://nodei.co/npm/nyg.png)](https://www.npmjs.com/package/nyg)
+```prompts``` a single questions or an array of questions to ask the user, using [inquirer](https://www.npmjs.com/package/inquirer) syntax.
+```globs``` a single glob or an array of globs specifying which files to copy and to where.
+
+### `nyg.run()`
+
+Starts the generator.
+
+### `nyg.on(event,function)`
+
+nyg extends an event emitter so all event emitter functions are exposed, although ```on``` will be the on you primarily use. Please see the [EventEmitter](https://nodejs.org/api/events.html) for further information.
+
+```event``` the event name.
+```function``` the function to call when the event is emitted.
+
+### `nyg.async()`
+
+Stops the generator at its current step and returns a function to call when you would like to resume it. This is useful if you want to perform some asynchronous functions between steps. You can call this function to stop the generator in any event.
+```js
+var gen = nyg(prompts,globs);
+gen.on('postprompt',function() {
+  // pause the generator after prompting is complete
+  var done = gen.async();
+  setTimeout(function() {
+    // resume the generator after performing some actions
+    done();
+  },1000)
+});
+```
+
+### `nyg.end()`
+
+Stops the generator, only call this if you want to cancel the generator prematurely, such as skipping the install step. This does not cancel an action if it is currently running, only prevents it from going to the next step.
+
+### `nyg.prompt(prompt,callback)`
+
+Exposes the prompt function for use outside the generator, follows the same syntax as the constructor.
+```prompt``` A single prompt or an array of prompts.
+```callback``` a function to call when the prompting is done, returns an object with the user values assigned to the keys you defined.
+
+### `nyg.copy(input,output,callback)`
+
+Exposes the copy function for use outside the generator, input, output, and the content of input will ben run through the templating engine.
+
+```input``` the input file.
+```output``` where to write the input file after it has been through the templating engine.
+```callback``` a function to call once the file has been written.
+
+### `nyg.config`
+
+Exposes the configuration object for use outside the generator. This object gets sent to all the templates so you can manually manipulate the values if you would like. The answers from the prompts automatically get set in this object.
+
+### `nyg.config.del(key)`
+
+Removes the value specified via ```key```.
+
+### `nyg.config.set(key,value)`
+
+Sets a new ```value``` specified via ```key```, this will overwrite whatever is already defined by that key.
+
+### `nyg.config.get(key)`
+
+Returns the value specified via ```key```.
+
+## Events
+
+nyg is an event emitter and will emit multiple events for you to react upon.
+```preprompt``` emitted before any prompting has happend.
+```postprompt``` emitted after prompts have been answered by the user.
+```precopy``` emitted before any files get run through the templating engine and outputted.
+```postcopy``` emitted after all the copying has been completed.
+```preinstall``` emitted before ```npm install``` has run.
+```postinstall``` emitted once npm has finished installing.
+
+## Test
+
+Running ```npm test``` will output the generator at ```test/index.js``` to the output folder. Please review ```test/index.js``` for a barebones generator setup.
 
 ## License
 
