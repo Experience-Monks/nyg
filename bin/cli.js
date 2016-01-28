@@ -29,9 +29,7 @@ function runGenerator(key) {
   var func;
   if (!func) try { func = require(key); } catch(e) {}
   if (!func) try { func = require('nyg-'+key); } catch(e) {}
-  if (func) {
+  if (typeof func === 'function') {
     func();
-  } else {
-    console.log('Generator',key,'not installed.');
   }
 }
