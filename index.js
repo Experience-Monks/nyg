@@ -8,12 +8,12 @@ var npm = require('./lib/npm');
 var store = require('./lib/store');
 var nyg = function(prompts,globs) {
   if (!(this instanceof nyg)) return new nyg(prompts,globs);
-  var origin = (module.parent) ? path.dirname(module.parent.filename) : '';
+  this.origin = (module.parent) ? path.dirname(module.parent.filename) : '';
   this._prompts = prompts;
   this._globs = globs.map(function(cur) {
-    cur.base = path.join(origin,cur.base);
+    cur.base = path.join(this.origin,cur.base);
     return cur;
-  });
+  }.bind(this));
   // Expose the prompt function and config object for use outside
   this.prompt = prompt;
   this.config = store;
@@ -44,7 +44,7 @@ nyg.prototype.copy = function(input,output,cb) {
   output = template.parse(output);
   mkdirp(path.dirname(output),function(err) {
     if (err) throw err;
-    template.copy(template.parse(input),path.join(this.cwd,output),cb);
+    template.copy(path.join(this.origin,template.parse(input)),path.join(this.cwd,output),cb);
   }.bind(this));
   return this;
 };
