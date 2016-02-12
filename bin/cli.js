@@ -23,8 +23,7 @@ if (key==='--list') {
   }
 } else {
   runGenerator(key);
-}
-
+} 
 function runGenerator(key) {
   var func;
   if (!func) try { func = require(key); } catch(e) {}
