@@ -20,7 +20,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "mkdir output && cd output && node ../test/index.js && cd ../",
-    "postinstall": "node bin/track.js"
+    "postinstall": "node bin/register.js",
+    "postuninstall": "node bin/deregister.js"
   },
   "bin": "bin/cli.js",
   "keywords": [
