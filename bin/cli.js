@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 var key = process.argv[2];
-if (key==='--list') {
+if (key === '--list' || key === '-l') {
   var config = require('./config');
   var generators = config.get('generators') || [];
   if (generators.length>0) {
