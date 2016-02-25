@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+'use strict'; 
 var key = process.argv[2];
 if (key === '--list' || key === '-l') {
   var config = require('./config');

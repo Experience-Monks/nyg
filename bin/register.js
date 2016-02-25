@@ -1,4 +1,4 @@
-var config = require('./config');
+var config = require('./config'); 
 try {
   var pkg = require('../../../package.json');
   var generators = config.get('generators') || [];
