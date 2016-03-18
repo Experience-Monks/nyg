@@ -27,7 +27,7 @@ nyg.prototype.run = function() {
   this.config.set('folder',path.basename(this.cwd));
   this._tasks = [this._startPrompt.bind(this),this._runPrompt.bind(this),this._startTemplate.bind(this),this._runTemplate.bind(this),this._startInstall.bind(this),this._runInstall.bind(this)];
   this._running = true;
-  this._next();
+  process.nextTick(this._next.bind(this));
   return this;
 };
 nyg.prototype.async = function() {
