@@ -24,7 +24,7 @@
   "scripts": {
     "test": "node test/",
     "postinstall": "node bin/register.js",
-    "postuninstall": "node bin/deregister.js"
+    "preuninstall": "node bin/deregister.js"
   },
   "bin": "bin/cli.js",
   "keywords": [
