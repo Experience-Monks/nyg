@@ -2,6 +2,8 @@ var log = function(type) {
   console.log(type);
 };
 
+var rf = require('rimraf');
+var mkdirp = require('mkdirp');
 var nyg = require('../');
 var prompts = [
   {
@@ -31,15 +33,20 @@ var prompts = [
   }
 ];
 var globs = [{glob: '*', base: 'template/'},{base: 'template/{{option}}', glob: '*'}];
-var gen = nyg(prompts,globs);
-gen.on('preprompt',log.bind(null,'preprompt'));
-gen.on('postprompt',log.bind(null,'postprompt'));
-gen.on('precopy',log.bind(null,'precopy'));
-gen.on('postcopy',function() {
-  log('postcopy');
-  if (!gen.config.get('npm')) gen.end();
-});
-gen.on('preinstall',log.bind(null,'preinstall'));
-gen.on('postinstall',log.bind(null,'postinstall'));
-gen.run();
 
+rf('output/*',function() {
+  mkdirp('output',function() {
+    process.chdir('output');
+    var gen = nyg(prompts,globs);
+    gen.on('preprompt',log.bind(null,'preprompt'));
+    gen.on('postprompt',log.bind(null,'postprompt'));
+    gen.on('precopy',log.bind(null,'precopy'));
+    gen.on('postcopy',function() {
+      log('postcopy');
+      if (!gen.config.get('npm')) gen.end();
+    });
+    gen.on('preinstall',log.bind(null,'preinstall'));
+    gen.on('postinstall',log.bind(null,'postinstall'));
+    gen.run();
+  });
+});

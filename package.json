@@ -18,9 +18,11 @@
     "markup-js": "^1.5.21",
     "mkdirp": "^0.5.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "rimraf": "^2.5.2"
+  },
   "scripts": {
-    "test": "mkdir output && cd output && node ../test/index.js && cd ../",
+    "test": "node test/",
     "postinstall": "node bin/register.js",
     "postuninstall": "node bin/deregister.js"
   },
