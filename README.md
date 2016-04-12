@@ -52,7 +52,7 @@ var globs = [
 ];
 ```
 
-The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache template system. Please see the docs for all the things you can do with it. If you do not want to run the file contents through markup, simply pass `template: false` with the glob object. This defaults to `true`, so you will have to pass it in for every glob object you do not want parsed. It will still parse the input and out paths however, just not file contents.
+The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache template system. Please see the docs for all the things you can do with it. If you do not want to run the file contents through markup, simply pass `template: false` with the glob object. This defaults to `true`, so you will have to pass it in for every glob object you do not want parsed. It will still parse the input and output paths however, just not file contents.
 
 In its simplest form, this is all you have to do to get the nyg generator running.
 
@@ -121,8 +121,8 @@ Exposes the prompt function for use outside the generator, follows the same synt
 Exposes the copy function for use outside the generator, input, output, and the content of input will be run through the template engine. Send `false` as the third parameter if you do not wish the content to be run through the template engine. 
 
 ```input``` the input file.  
-```output``` where to write the input file after it has been through the template engine.
-```[parse]``` Optional parameter, pass false if you do not want the content to be run through the template engine.
+```output``` where to write the input file after it has been through the template engine.  
+```[parse]``` Optional parameter, pass false if you do not want the content to be run through the template engine.  
 ```callback``` a function to call once the file has been written.
 
 ### `nyg.config`
