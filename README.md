@@ -47,12 +47,12 @@ Here is an example of the glob options:
 ```js
 var globs = [
   { base: 'templates/', glob: 'scripts/*' },
-  { base: 'templates/style/', output: 'lib/style/' },
+  { base: 'templates/style/', output: 'lib/style/', template: false },
   { base: 'templates/{{type}}/', glob: '*' }
 ];
 ```
 
-The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache template system. Please see the docs for all the things you can do with it.
+The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache template system. Please see the docs for all the things you can do with it. If you do not want to run the file contents through markup, simply pass `template: false` with the glob object. This defaults to `true`, so you will have to pass it in for every glob object you do not want parsed. It will still parse the input and out paths however, just not file contents.
 
 In its simplest form, this is all you have to do to get the nyg generator running.
 
@@ -116,13 +116,14 @@ Exposes the prompt function for use outside the generator, follows the same synt
 ```prompt``` A single prompt or an array of prompts.  
 ```callback``` a function to call when the prompting is done, returns an object with the user values assigned to the keys you defined.  
 
-### `nyg.copy(input,output,callback)`
+### `nyg.copy(input,output,[parse],callback)`
 
-Exposes the copy function for use outside the generator, input, output, and the content of input will ben run through the template engine.
+Exposes the copy function for use outside the generator, input, output, and the content of input will be run through the template engine. Send `false` as the third parameter if you do not wish the content to be run through the template engine. 
 
 ```input``` the input file.  
-```output``` where to write the input file after it has been through the template engine.  
-```callback``` a function to call once the file has been written.  
+```output``` where to write the input file after it has been through the template engine.
+```[parse]``` Optional parameter, pass false if you do not want the content to be run through the template engine.
+```callback``` a function to call once the file has been written.
 
 ### `nyg.config`
 

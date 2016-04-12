@@ -49,11 +49,21 @@ nyg.prototype.end = function() {
   this.emit('complete');
   return this;
 };
-nyg.prototype.copy = function(input,output,cb) {
+nyg.prototype.copy = function(input,output,parse,cb) {
+  if (typeof parse === 'function') {
+    cb = parse;
+    parse = true;
+  } else {
+    parse = parse === false ? false : true;
+  }
   output = template.parse(output);
   mkdirp(path.dirname(output),function(err) {
     if (err) throw err;
-    template.copy(path.join(this.origin,template.parse(input)),path.join(this.cwd,output),cb);
+    if (parse) {
+      template.template(path.join(this.origin,template.parse(input)),path.join(this.cwd,output),cb);
+    } else {
+      template.copy(path.join(this.origin,template.parse(input)),path.join(this.cwd,output),cb);
+    }
   }.bind(this));
   return this;
 };

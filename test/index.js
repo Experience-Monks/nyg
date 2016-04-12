@@ -32,18 +32,32 @@ var prompts = [
     default: false
   }
 ];
-var globs = [{glob: '*', base: 'template/'},{base: 'template/{{option}}', glob: '*'}];
+var globs = [
+  {base: 'template/', glob: '*'},
+  {base: 'template/{{option}}', glob: '*'},
+  {base: 'template/parser/', glob: '*', template: false }
+ ];
 
-rf('output/*',function() {
-  mkdirp('output',function() {
-    process.chdir('output');
+rf('test/output/*',function() {
+  mkdirp('test/output',function() {
+    process.chdir('test/output');
     var gen = nyg(prompts,globs);
     gen.on('preprompt',log.bind(null,'preprompt'));
     gen.on('postprompt',log.bind(null,'postprompt'));
     gen.on('precopy',log.bind(null,'precopy'));
     gen.on('postcopy',function() {
       log('postcopy');
-      if (!gen.config.get('npm')) gen.end();
+      var done = gen.end();
+      gen.copy('template/parser/parser.txt','copy-parsed.txt',function() {
+        gen.copy('template/parser/parser.txt','copy-unparsed.txt',false,function() {
+          if (!gen.config.get('npm')) {
+            gen.end();
+          } else {
+            done();
+          }
+        });
+      });
+      
     });
     gen.on('preinstall',log.bind(null,'preinstall'));
     gen.on('postinstall',log.bind(null,'postinstall'));
