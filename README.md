@@ -10,7 +10,7 @@ Not another yeoman generator, simplified project generator base around prompts, 
 
 There are 3 basic things you need to use nyg: prompts (questions to ask before installing), globs (matching all your templates), and the templates themselves.
 
-The prompts are based on [inquirer](https://www.npmjs.com/package/inquirer). Please see the inquirer docs for the full amount of options available to you. These prompted questions get passed to your templates using [markup-js](https://www.npmjs.com/package/markup-js) with the corresponding keys you define as "name".
+The prompts are based on [inquirer](https://www.npmjs.com/package/inquirer). Please see the inquirer docs for the full amount of options available to you. These prompted questions get passed to your templates using [handlebars](https://www.npmjs.com/package/handlebars) with the corresponding keys you define as "name".
 
 Here is an example of what you can do.
 
@@ -40,7 +40,7 @@ var prompts = [{
 }];
 ```
 
-The globs are simply identifiers for your template files. There are 3 properties to each glob base, glob, and output. The base property is the part of the path that will be removed when copied. The glob property is your file globs, it defaults to **/*. The output property is where you want to output the new files, defaults to '' which would be the the current working directory. All these properties get passed through the [markup-js](https://www.npmjs.com/package/markup-js) template system as well, so you can use any of your variables within them.
+The globs are simply identifiers for your template files. There are 3 properties to each glob base, glob, and output. The base property is the part of the path that will be removed when copied. The glob property is your file globs, it defaults to **/*. The output property is where you want to output the new files, defaults to '' which would be the the current working directory. All these properties get passed through the [handlebars](https://www.npmjs.com/package/handlebars) template system as well, so you can use any of your variables within them.
 
 Here is an example of the glob options:
 
@@ -52,7 +52,7 @@ var globs = [
 ];
 ```
 
-The templates are passed through [markup-js](https://www.npmjs.com/package/markup-js). It is a full featured moustache template system. Please see the docs for all the things you can do with it. If you do not want to run the file contents through markup, simply pass `template: false` with the glob object. This defaults to `true`, so you will have to pass it in for every glob object you do not want parsed. It will still parse the input and output paths however, just not file contents.
+The templates are passed through [handlebars](https://www.npmjs.com/package/handlebars)). It is a full featured moustache template system. Please see the docs for all the things you can do with it. If you do not want to run the file contents through handlebars, simply pass `template: false` with the glob object. This defaults to `true`, so you will have to pass it in for every glob object you do not want parsed. It will still parse the input and output paths however, just not file contents.
 
 In its simplest form, this is all you have to do to get the nyg generator running.
 
