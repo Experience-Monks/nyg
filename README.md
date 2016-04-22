@@ -150,7 +150,19 @@ nyg is an event emitter and will emit multiple events for you to react upon.
 ```precopy``` emitted before any files get run through the template engine and outputted.  
 ```postcopy``` emitted after all the copying has been completed.  
 ```preinstall``` emitted before ```npm install``` has run.  
-```postinstall``` emitted once npm has finished installing.  
+```postinstall``` emitted once npm has finished installing.
+
+## Handlebars
+
+Our handlebars setup also includes a string comparison helper #is which functions much like a regular if statemeent. He is an example:
+
+```
+{{#is NODE_ENV 'production'}}
+This will only be shown if the node environment is production
+{{/is}}
+```
+
+If there are any other helpers you would like to see added, please feel free to create a github issue.
 
 ## Test
 
