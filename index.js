@@ -97,11 +97,11 @@ nyg.prototype._runPrompt = function() {
   }.bind(this));
 };
 nyg.prototype._startTemplate = function() {
-  this.config.save();
   this.emit('precopy');
   this._next();
 };
 nyg.prototype._runTemplate = function() {
+  this.config.save();
   template(this._globs,this.cwd,function() {
     this.emit('postcopy');
     this._next();
