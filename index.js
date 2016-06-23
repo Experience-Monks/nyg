@@ -67,6 +67,11 @@ nyg.prototype.copy = function(input,output,parse,cb) {
   }.bind(this));
   return this;
 };
+nyg.prototype.chdir = function(dir) {
+  this.cwd = dir;
+  this.config.chdir(dir);
+  this.config.set('folder',path.basename(dir));
+};
 /* Private Functions */
 nyg.prototype._resume = function() {
   this._running = true;
@@ -92,6 +97,7 @@ nyg.prototype._runPrompt = function() {
   }.bind(this));
 };
 nyg.prototype._startTemplate = function() {
+  this.config.save();
   this.emit('precopy');
   this._next();
 };
