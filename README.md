@@ -83,6 +83,10 @@ The main entry point to nyg. Returns an nyg instance.
 
 Starts the generator.
 
+### `nyg.chdir(dir)`
+
+Changes the current working directory, be sure to run this before the copy phase. Simply pass in the directory as a string.
+
 ### `nyg.on(event,function)`
 
 nyg extends an event emitter so all event emitter functions are exposed, although ```on``` will be the on you primarily use. Please see the [EventEmitter](https://nodejs.org/api/events.html) for further information.

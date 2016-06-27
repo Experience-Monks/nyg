@@ -101,6 +101,7 @@ nyg.prototype._startTemplate = function() {
   this._next();
 };
 nyg.prototype._runTemplate = function() {
+  this.config.save();
   template(this._globs,this.cwd,function() {
     this.emit('postcopy');
     this._next();

@@ -27,6 +27,12 @@ var prompts = [
   },
   {
     type: "confirm",
+    message: "use chdir?",
+    name: "chdir",
+    default: false
+  },
+  {
+    type: "confirm",
     message: "run npm install?",
     name: "npm",
     default: false
@@ -39,28 +45,35 @@ var globs = [
  ];
 
 rf('test/output/*',function() {
-  mkdirp('test/output',function() {
-    process.chdir('test/output');
-    var gen = nyg(prompts,globs);
-    gen.on('preprompt',log.bind(null,'preprompt'));
-    gen.on('postprompt',log.bind(null,'postprompt'));
-    gen.on('precopy',log.bind(null,'precopy'));
-    gen.on('postcopy',function() {
-      log('postcopy');
-      var done = gen.end();
-      gen.copy('template/parser/parser.txt','copy-parsed.txt',function() {
-        gen.copy('template/parser/parser.txt','copy-unparsed.txt',false,function() {
-          if (!gen.config.get('npm')) {
-            gen.end();
-          } else {
-            done();
-          }
+  rf('test/output2/*',function() {
+    mkdirp('test/output',function() {
+      mkdirp('test/output2',function() {
+        process.chdir('test/output');
+        var gen = nyg(prompts,globs);
+        gen.on('preprompt',log.bind(null,'preprompt'));
+        gen.on('postprompt',log.bind(null,'postprompt'));
+        gen.on('precopy',function() {
+          log('precopy');
+          gen.chdir(process.cwd()+'2');
         });
+        gen.on('postcopy',function() {
+          log('postcopy');
+          var done = gen.end();
+          gen.copy('template/parser/parser.txt','copy-parsed.txt',function() {
+            gen.copy('template/parser/parser.txt','copy-unparsed.txt',false,function() {
+              if (!gen.config.get('npm')) {
+                gen.end();
+              } else {
+                done();
+              }
+            });
+          });
+          
+        });
+        gen.on('preinstall',log.bind(null,'preinstall'));
+        gen.on('postinstall',log.bind(null,'postinstall'));
+        gen.run();
       });
-      
     });
-    gen.on('preinstall',log.bind(null,'preinstall'));
-    gen.on('postinstall',log.bind(null,'postinstall'));
-    gen.run();
   });
 });
