@@ -70,6 +70,20 @@ cd your/project/directory
 nyg your-generator
 ```
 
+## Command line interface
+
+Details for `nyg` command-line interface
+
+```
+Usage:
+nyg [opts]
+
+Options: 
+ --list, -l		show list of available generators
+ --version, -v	show version of nyg
+
+```
+
 ## API
 
 ### `nyg(prompts,globs)`
