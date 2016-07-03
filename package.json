@@ -1,6 +1,6 @@
 {
   "name": "nyg",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Not another yeoman generator, a simplified project generator based around prompts and events.",
   "main": "index.js",
   "license": "MIT",
