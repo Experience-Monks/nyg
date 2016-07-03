@@ -1,6 +1,9 @@
 #!/usr/bin/env node
-'use strict'; 
+'use strict';
 var key = process.argv[2];
+var debug = process.argv.length > 3 
+            && (process.argv.indexOf('-d') >= 0 || process.argv.indexOf('--debug') >= 0);
+
 if (key === '--list' || key === '-l') {
   var config = require('./config');
   var generators = config.get('generators') || [];
@@ -39,10 +42,12 @@ function printVersion(key) {
     try {
       genPackageJson = require(path);
     } catch(e) {
+      printError(e);
+
       try {
         key = 'nyg-' + key;
         genPackageJson = require('nyg-' + path);
-      } catch(e) {}
+      } catch(e) {printError(e);}
     }
 
     if (genPackageJson) {
@@ -53,9 +58,13 @@ function printVersion(key) {
 
 function runGenerator(key) {
   var func;
-  if (!func) try { func = require(key); } catch(e) {}
-  if (!func) try { func = require('nyg-'+key); } catch(e) {}
+  if (!func) try { func = require(key); } catch(e) {printError(e);}
+  if (!func) try { func = require('nyg-'+key); } catch(e) {printError(e);}
   if (typeof func === 'function') {
     func();
   }
+}
+
+function printError(e){
+  debug && console.error(e);
 }
