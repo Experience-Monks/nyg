@@ -79,8 +79,9 @@ Usage:
 nyg [opts]
 
 Options: 
- --list, -l		show list of available generators
- --version, -v	show version of nyg
+ --list, -l						show list of available generators
+ --version, -v					show version of nyg
+ [generator] --version, -v		show version of nyg and nyg-generator
 
 ```
 
