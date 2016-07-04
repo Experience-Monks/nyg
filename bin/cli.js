@@ -65,7 +65,7 @@ function runGenerator(key) {
   if (typeof func === 'function') {
     func();
   }
-  if (notFound1 && notFound2) console.log('generator',key,'not found.');
+  if (notFound1 && notFound2) console.error('generator',key,'not found.');
 }
 
 function moduleFound(e){
