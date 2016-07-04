@@ -74,16 +74,14 @@ nyg your-generator
 
 Details for `nyg` command-line interface
 
-```
-Usage:
-nyg [opts]
+Usage:  
+```nyg [opts]```  
 
-Options: 
- --list, -l						show list of available generators
- --version, -v					show version of nyg
- [generator] --version, -v		show version of nyg and nyg-generator
-
-```
+Options:  
+  ```--list, -l```  show list of available generators  
+  ```--version, -v```  show version of nyg  
+  ```[generator] --version, -v```  show version of nyg and nyg-generator  
+  ```[generator] --debug, -d```  displays any errors that occur when running a generator  
 
 ## API
 
