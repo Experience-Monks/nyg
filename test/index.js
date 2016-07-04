@@ -58,7 +58,7 @@ rf('test/output/*',function() {
         });
         gen.on('postcopy',function() {
           log('postcopy');
-          var done = gen.end();
+          var done = gen.async();
           gen.copy('template/parser/parser.txt','copy-parsed.txt',function() {
             gen.copy('template/parser/parser.txt','copy-unparsed.txt',false,function() {
               if (!gen.config.get('npm')) {
