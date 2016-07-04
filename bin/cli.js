@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 var key = process.argv[2];
-var debug = process.argv.length > 3 
-            && (process.argv.indexOf('-d') >= 0 || process.argv.indexOf('--debug') >= 0);
+var debug = process.argv.length > 3 && (process.argv.indexOf('-d') >= 0 || process.argv.indexOf('--debug') >= 0);
 
+if (!key) key = '-l';
 if (key === '--list' || key === '-l') {
   var config = require('./config');
   var generators = config.get('generators') || [];
@@ -58,13 +58,21 @@ function printVersion(key) {
 
 function runGenerator(key) {
   var func;
-  if (!func) try { func = require(key); } catch(e) {printError(e);}
-  if (!func) try { func = require('nyg-'+key); } catch(e) {printError(e);}
+  var notFound1;
+  var notFound2;
+  if (!func) try { func = require(key); } catch(e) { notFound1 = moduleFound(e); }
+  if (!func) try { func = require('nyg-'+key); } catch(e) { notFound2 = moduleFound(e); } 
   if (typeof func === 'function') {
     func();
   }
+  if (notFound1 && notFound2) console.log('generator',key,'not found.');
 }
 
-function printError(e){
-  debug && console.error(e);
+function moduleFound(e){
+  if (e.code && e.code=='MODULE_NOT_FOUND') {
+    return true;
+  } else {
+    if (debug) console.error(e);
+    return false;
+  }
 }
