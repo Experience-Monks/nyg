@@ -29,7 +29,7 @@ var nyg = function(prompts,globs) {
 nyg.prototype = Object.create(EventEmitter.prototype);
 /* Public Functions */
 nyg.prototype.run = function() {
-  this.cwd = process.cwd();
+  this.cwd = this.cwd || process.cwd();
   this.config.chdir(this.cwd);
   this.config.set('nyg-version',this.version);
   this.config.set('generator-version',this.generator);
