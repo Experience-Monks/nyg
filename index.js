@@ -6,8 +6,8 @@ var template = require('./lib/template');
 var prompt = require('./lib/prompt');
 var npm = require('./lib/npm');
 var store = require('./lib/store');
-var nyg = function(prompts,globs) {
-  if (!(this instanceof nyg)) return new nyg(prompts,globs);
+var nyg = function(prompts,globs,options) {
+  if (!(this instanceof nyg)) return new nyg(prompts,globs,options);
   this.origin = (module.parent) ? path.dirname(module.parent.filename) : '';
   this.version = require('./package.json').version;
   try { 
@@ -15,6 +15,7 @@ var nyg = function(prompts,globs) {
   } catch(e) { 
     this.generator = "0.0.0";
   }
+  this._options = options || {};
   this._prompts = prompts;
   this._globs = globs.map(function(cur) {
     cur.base = path.join(this.origin,cur.base);
@@ -34,6 +35,14 @@ nyg.prototype.run = function() {
   this.config.set('nyg-version',this.version);
   this.config.set('generator-version',this.generator);
   this.config.set('folder',path.basename(this.cwd));
+
+  // write passed in options into config
+  // this is useful if you have hardcoded values that maybe
+  // generated on initialization
+  Object.keys(this._options).forEach(function(key) {
+    this.config.set(key, this._options[key]);
+  }.bind(this));
+
   this._tasks = [this._startPrompt.bind(this),this._runPrompt.bind(this),this._startTemplate.bind(this),this._runTemplate.bind(this),this._startInstall.bind(this),this._runInstall.bind(this)];
   this._running = true;
   process.nextTick(this._next.bind(this));
@@ -101,7 +110,14 @@ nyg.prototype._startTemplate = function() {
   this._next();
 };
 nyg.prototype._runTemplate = function() {
-  this.config.save();
+  var doSaveConfig = this.config.get('saveConfig');
+
+  // add in the ability to ask if config file should be saved
+  // by default the config file will be saved
+  if(doSaveConfig === undefined || doSaveConfig) {
+    this.config.save();
+  }
+
   template(this._globs,this.cwd,function() {
     this.emit('postcopy');
     this._next();
