@@ -15,9 +15,16 @@ var nyg = function(prompts,globs,options) {
   } catch(e) { 
     this.generator = "0.0.0";
   }
+  if (globs===undefined && options===undefined && !Array.isArray(prompts) && !this._isPrompt(prompts)) {
+    options = prompts || {};
+    globs = options.globs;
+    prompts = options.prompts;
+    delete options.prompts;
+    delete options.globs;
+  }
   this._options = options || {};
-  this._prompts = prompts;
-  this._globs = globs.map(function(cur) {
+  this._prompts = prompts || [];
+  this._globs = (globs || []).map(function(cur) {
     cur.base = path.join(this.origin,cur.base);
     return cur;
   }.bind(this));
@@ -94,6 +101,10 @@ nyg.prototype._next = function() {
   } else {
     this.end();
   }
+};
+nyg.prototype._isPrompt = function(obj) {
+  var validTypes = ['input','confirm','list','rawlist','expand','checkbox','password','editor'];
+  return obj.name && obj.type && validTypes.indexOf(obj.type)>-1;
 };
 nyg.prototype._startPrompt = function() {
   this.emit('preprompt');
