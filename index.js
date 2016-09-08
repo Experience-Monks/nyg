@@ -139,7 +139,6 @@ nyg.prototype._startInstall = function() {
   this._next();
 };
 nyg.prototype._runInstall = function() {
-  this.emit('preinstall');
   npm(this.cwd,function() {
     this.emit('postinstall');
     this._next();
