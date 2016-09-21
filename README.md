@@ -92,7 +92,9 @@ The main entry point to nyg. Returns an nyg instance.
 ```prompts``` a single questions or an array of questions to ask the user, using [inquirer](https://www.npmjs.com/package/inquirer) syntax.  
 ```globs``` a single glob or an array of globs specifying which files to copy and to where.  
 ```options``` an optional object which can be passed in. These options will be merged in with data gathered via `prompts`. This can be useful if for instance you want to template in a Date or some other hardcoded value. You can also pass in:
-- `saveConfig` - which if set to `false` will ensure that the `nyg-cfg.json` will not be written.
+- `saveConfig` - which if set to `false` will ensure that the `nyg-cfg.json` 
+will not be written.
+- `npmInstall` - if set to false then `npm install` will not be called.
 
 These parameters can also be passed in as a single object to nyg. `prompts` and `globs` are reserved keywords in this object but everything else will be treated as the options parameter.
 

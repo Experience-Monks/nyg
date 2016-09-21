@@ -50,7 +50,13 @@ nyg.prototype.run = function() {
     this.config.set(key, this._options[key]);
   }.bind(this));
 
-  this._tasks = [this._startPrompt.bind(this),this._runPrompt.bind(this),this._startTemplate.bind(this),this._runTemplate.bind(this),this._startInstall.bind(this),this._runInstall.bind(this)];
+  this._tasks = [this._startPrompt.bind(this),this._runPrompt.bind(this),this._startTemplate.bind(this),this._runTemplate.bind(this)];
+
+  // if option npmInstall is set then run npm events
+  if(this.config.get('npmInstall') === undefined || this.config.get('npmInstall')) {
+    this._tasks.push(this._startInstall.bind(this),this._runInstall.bind(this));
+  }
+  
   this._running = true;
   process.nextTick(this._next.bind(this));
   return this;
