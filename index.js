@@ -126,6 +126,17 @@ nyg.prototype._startTemplate = function() {
   this.emit('precopy');
   this._next();
 };
+nyg.prototype._filterGlobs = function() {
+  var data = this.config.getAll();
+  var globs = this._globs.map(function(cur) {
+    if (typeof cur.when === 'function' && !cur.when(data)) {
+      return undefined;
+    } else {
+      return cur;
+    }
+  });
+  return globs.filter(function(i){return i;});
+};
 nyg.prototype._runTemplate = function() {
   var doSaveConfig = this.config.get('saveConfig');
 
@@ -135,7 +146,7 @@ nyg.prototype._runTemplate = function() {
     this.config.save();
   }
 
-  template(this._globs,this.cwd,function() {
+  template(this._filterGlobs(this._globs),this.cwd,function() {
     this.emit('postcopy');
     this._next();
   }.bind(this));

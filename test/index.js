@@ -36,12 +36,19 @@ var prompts = [
     message: "run npm install?",
     name: "npm",
     default: false
+  },
+  {
+    type: "confirm",
+    message: "Copy when folder?",
+    name: "when",
+    default: false
   }
 ];
 var globs = [
   {base: 'template/', glob: '*'},
   {base: 'template/{{option}}', glob: '*'},
-  {base: 'template/parser/', glob: '*', template: false }
+  {base: 'template/parser/', glob: '*', template: false },
+  {base: 'template/when/', glob: '*', when: function(answers) { return answers.when; } },
  ];
 
 rf('test/output/*',function() {
@@ -54,7 +61,7 @@ rf('test/output/*',function() {
         gen.on('postprompt',log.bind(null,'postprompt'));
         gen.on('precopy',function() {
           log('precopy');
-          gen.chdir(process.cwd()+'2');
+          if (gen.config.get('chdir')) gen.chdir(process.cwd()+'2');
         });
         gen.on('postcopy',function() {
           log('postcopy');
