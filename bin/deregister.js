@@ -1,5 +1,5 @@
-var config = require('./config'); 
 try { 
+  var config = require('./config'); 
   var pkg = require('../../../package.json');
   var generators = config.get('generators') || [];
   var generatorIndex = generators.indexOf(pkg.name);
