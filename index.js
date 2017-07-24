@@ -32,6 +32,7 @@ var nyg = function(prompts,globs,options) {
   this.prompt = prompt;
   this.config = store;
   this._running = false;
+  if (this._options.ignore) this.config.set('ignore', this._options.ignore);
   EventEmitter.call(this);
 };
 nyg.prototype = Object.create(EventEmitter.prototype);

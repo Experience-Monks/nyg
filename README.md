@@ -112,6 +112,7 @@ The main entry point to nyg. Returns an nyg instance.
 - `saveConfig` - which if set to `false` will ensure that the `nyg-cfg.json` 
 will not be written.
 - `npmInstall` - if set to false then `npm install` will not be called.
+- `ignore` - A list of file extensions and / or file names the handlebars templating engine will ignore.
 
 These parameters can also be passed in as a single object to nyg. `prompts` and `globs` are reserved keywords in this object but everything else will be treated as the options parameter.
 
@@ -119,7 +120,9 @@ These parameters can also be passed in as a single object to nyg. `prompts` and 
 nyg({
   prompts: prompts,
   globs: globs,
-  saveConfig: false
+  saveConfig: false,
+  npmInstall: false,
+  ignore: ['.txt']
 })
 ```
 
