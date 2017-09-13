@@ -29,8 +29,8 @@
   },
   "bin": "bin/cli.js",
   "keywords": [
-    "project,",
-    "generator,",
+    "project",
+    "generator",
     "yeoman",
     "tool",
     "build",
