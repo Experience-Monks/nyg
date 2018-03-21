@@ -176,14 +176,14 @@ Exposes the copy function for use outside the generator, input, output, and the 
 ```[parse]``` Optional parameter, pass false if you do not want the content to be run through the template engine.  
 ```callback``` a function to call once the file has been written.
 
-### `nyg.spawn(command,arguments,[cwd],callback)`
+### `nyg.spawn(command,[arguments],[cwd],[callback])`
 
 Exposes the spawn method for external use. Uses the [cross-spawn](https://www.npmjs.com/package/cross-spawn) library for multi-platform support. 
 
 ```command``` The command to run.  
-```arguments``` An array of string arguments to pass to the command.  
+```[arguments]``` Optional parameter, An array of string arguments to pass to the command.  
 ```[cwd]``` Optional parameter, pass in a path where you want the command to run, otherwise defaults to the current directory.  
-```callback``` a function to call once the file has been written.  
+```[callback]``` Optional parameter, a function to call once the file has been written.  
 
 ### `nyg.config`
 

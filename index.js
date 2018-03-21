@@ -96,6 +96,10 @@ nyg.prototype.chdir = function(dir) {
   this.config.set('folder',path.basename(dir));
 };
 nyg.prototype.spawn = function(command,args,cwd,cb) {
+  if (!Array.isArray(args) && typeof args === "string") {
+    cwd = args;
+    args = null;
+  }
   if (typeof cwd === 'function') {
     cb = cwd;
     cwd = this.cwd;
