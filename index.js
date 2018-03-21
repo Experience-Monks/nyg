@@ -4,7 +4,7 @@ var mkdirp = require('mkdirp');
 var EventEmitter = require('events').EventEmitter;
 var template = require('./lib/template');
 var prompt = require('./lib/prompt');
-var npm = require('./lib/npm');
+var spawn = require('./lib/spawn');
 var store = require('./lib/store');
 var nyg = function(prompts,globs,options) {
   if (!(this instanceof nyg)) return new nyg(prompts,globs,options);
@@ -95,6 +95,13 @@ nyg.prototype.chdir = function(dir) {
   this.config.chdir(dir);
   this.config.set('folder',path.basename(dir));
 };
+nyg.prototype.spawn = function(command,args,cwd,cb) {
+  if (typeof cwd === 'function') {
+    cb = cwd;
+    cwd = this.cwd;
+  }
+  spawn(command,args,cwd,cb);
+};
 /* Private Functions */
 nyg.prototype._resume = function() {
   this._running = true;
@@ -157,7 +164,7 @@ nyg.prototype._startInstall = function() {
   this._next();
 };
 nyg.prototype._runInstall = function() {
-  npm(this.cwd,function() {
+  this.spawn('npm',['install'],function() {
     this.emit('postinstall');
     this._next();
   }.bind(this));
