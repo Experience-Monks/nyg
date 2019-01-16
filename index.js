@@ -6,16 +6,16 @@ var template = require('./lib/template');
 var prompt = require('./lib/prompt');
 var spawn = require('./lib/spawn');
 var store = require('./lib/store');
-var nyg = function(prompts,globs,options) {
-  if (!(this instanceof nyg)) return new nyg(prompts,globs,options);
-  this.origin = (module.parent) ? path.dirname(module.parent.filename) : '';
+var nyg = function(prompts, globs, options) {
+  if (!(this instanceof nyg)) return new nyg(prompts, globs, options);
+  this.origin = module.parent ? path.dirname(module.parent.filename) : '';
   this.version = require('./package.json').version;
-  try { 
-    this.generator = require(path.join(this.origin,'package.json')).version;
-  } catch(e) { 
-    this.generator = "0.0.0";
+  try {
+    this.generator = require(path.join(this.origin, 'package.json')).version;
+  } catch (e) {
+    this.generator = '0.0.0';
   }
-  if (globs===undefined && options===undefined && !Array.isArray(prompts) && !this._isPrompt(prompts)) {
+  if (globs === undefined && options === undefined && !Array.isArray(prompts) && !this._isPrompt(prompts)) {
     options = prompts || {};
     globs = options.globs;
     prompts = options.prompts;
@@ -24,10 +24,12 @@ var nyg = function(prompts,globs,options) {
   }
   this._options = options || {};
   this._prompts = prompts || [];
-  this._globs = (globs || []).map(function(cur) {
-    cur.base = path.join(this.origin,cur.base);
-    return cur;
-  }.bind(this));
+  this._globs = (globs || []).map(
+    function(cur) {
+      cur.base = path.join(this.origin, cur.base);
+      return cur;
+    }.bind(this)
+  );
   // Expose the prompt function and config object for use outside
   this.prompt = prompt;
   this.config = store;
@@ -40,24 +42,31 @@ nyg.prototype = Object.create(EventEmitter.prototype);
 nyg.prototype.run = function() {
   this.cwd = this.cwd || process.cwd();
   this.config.chdir(this.cwd);
-  this.config.set('nyg-version',this.version);
-  this.config.set('generator-version',this.generator);
-  this.config.set('folder',path.basename(this.cwd));
+  this.config.set('nyg-version', this.version);
+  this.config.set('generator-version', this.generator);
+  this.config.set('folder', path.basename(this.cwd));
 
   // write passed in options into config
   // this is useful if you have hardcoded values that maybe
   // generated on initialization
-  Object.keys(this._options).forEach(function(key) {
-    this.config.set(key, this._options[key]);
-  }.bind(this));
+  Object.keys(this._options).forEach(
+    function(key) {
+      this.config.set(key, this._options[key]);
+    }.bind(this)
+  );
 
-  this._tasks = [this._startPrompt.bind(this),this._runPrompt.bind(this),this._startTemplate.bind(this),this._runTemplate.bind(this)];
+  this._tasks = [
+    this._startPrompt.bind(this),
+    this._runPrompt.bind(this),
+    this._startTemplate.bind(this),
+    this._runTemplate.bind(this)
+  ];
 
   // if option npmInstall is set then run npm events
-  if(this.config.get('npmInstall') === undefined || this.config.get('npmInstall')) {
-    this._tasks.push(this._startInstall.bind(this),this._runInstall.bind(this));
+  if (this.config.get('npmInstall') === undefined || this.config.get('npmInstall')) {
+    this._tasks.push(this._startInstall.bind(this), this._runInstall.bind(this));
   }
-  
+
   this._running = true;
   process.nextTick(this._next.bind(this));
   return this;
@@ -72,7 +81,7 @@ nyg.prototype.end = function() {
   this.emit('complete');
   return this;
 };
-nyg.prototype.copy = function(input,output,parse,cb) {
+nyg.prototype.copy = function(input, output, parse, cb) {
   if (typeof parse === 'function') {
     cb = parse;
     parse = true;
@@ -80,23 +89,26 @@ nyg.prototype.copy = function(input,output,parse,cb) {
     parse = parse === false ? false : true;
   }
   output = template.parse(output);
-  mkdirp(path.dirname(output),function(err) {
-    if (err) throw err;
-    if (parse) {
-      template.template(path.join(this.origin,template.parse(input)),path.join(this.cwd,output),cb);
-    } else {
-      template.copy(path.join(this.origin,template.parse(input)),path.join(this.cwd,output),cb);
-    }
-  }.bind(this));
+  mkdirp(
+    path.dirname(output),
+    function(err) {
+      if (err) throw err;
+      if (parse) {
+        template.template(path.join(this.origin, template.parse(input)), path.join(this.cwd, output), cb);
+      } else {
+        template.copy(path.join(this.origin, template.parse(input)), path.join(this.cwd, output), cb);
+      }
+    }.bind(this)
+  );
   return this;
 };
 nyg.prototype.chdir = function(dir) {
   this.cwd = dir;
   this.config.chdir(dir);
-  this.config.set('folder',path.basename(dir));
+  this.config.set('folder', path.basename(dir));
 };
-nyg.prototype.spawn = function(command,args,cwd,cb) {
-  if (!Array.isArray(args) && typeof args === "string") {
+nyg.prototype.spawn = function(command, args, cwd, cb) {
+  if (!Array.isArray(args) && typeof args === 'string') {
     cwd = args;
     args = null;
   }
@@ -104,7 +116,7 @@ nyg.prototype.spawn = function(command,args,cwd,cb) {
     cb = cwd;
     cwd = this.cwd;
   }
-  spawn(command,args,cwd,cb);
+  spawn(command, args, cwd, cb);
 };
 /* Private Functions */
 nyg.prototype._resume = function() {
@@ -113,7 +125,7 @@ nyg.prototype._resume = function() {
 };
 nyg.prototype._next = function() {
   if (!this._running) return;
-  if (this._tasks.length>0) {
+  if (this._tasks.length > 0) {
     var task = this._tasks.shift();
     task();
   } else {
@@ -121,18 +133,21 @@ nyg.prototype._next = function() {
   }
 };
 nyg.prototype._isPrompt = function(obj) {
-  var validTypes = ['input','confirm','list','rawlist','expand','checkbox','password','editor'];
-  return obj.name && obj.type && validTypes.indexOf(obj.type)>-1;
+  var validTypes = ['input', 'confirm', 'list', 'rawlist', 'expand', 'checkbox', 'password', 'editor'];
+  return obj.name && obj.type && validTypes.indexOf(obj.type) > -1;
 };
 nyg.prototype._startPrompt = function() {
   this.emit('preprompt');
   this._next();
 };
 nyg.prototype._runPrompt = function() {
-  prompt(this._prompts,function() {
-    this.emit('postprompt');
-    this._next();
-  }.bind(this));
+  prompt(
+    this._prompts,
+    function() {
+      this.emit('postprompt');
+      this._next();
+    }.bind(this)
+  );
 };
 nyg.prototype._startTemplate = function() {
   this.emit('precopy');
@@ -147,30 +162,40 @@ nyg.prototype._filterGlobs = function() {
       return cur;
     }
   });
-  return globs.filter(function(i){return i;});
+  return globs.filter(function(i) {
+    return i;
+  });
 };
 nyg.prototype._runTemplate = function() {
   var doSaveConfig = this.config.get('saveConfig');
 
   // add in the ability to ask if config file should be saved
   // by default the config file will be saved
-  if(doSaveConfig === undefined || doSaveConfig) {
+  if (doSaveConfig === undefined || doSaveConfig) {
     this.config.save();
   }
 
-  template(this._filterGlobs(this._globs),this.cwd,function() {
-    this.emit('postcopy');
-    this._next();
-  }.bind(this));
+  template(
+    this._filterGlobs(this._globs),
+    this.cwd,
+    function() {
+      this.emit('postcopy');
+      this._next();
+    }.bind(this)
+  );
 };
 nyg.prototype._startInstall = function() {
   this.emit('preinstall');
   this._next();
 };
 nyg.prototype._runInstall = function() {
-  this.spawn('npm',['install'],function() {
-    this.emit('postinstall');
-    this._next();
-  }.bind(this));
+  this.spawn(
+    'npm',
+    ['install'],
+    function() {
+      this.emit('postinstall');
+      this._next();
+    }.bind(this)
+  );
 };
 module.exports = nyg;
