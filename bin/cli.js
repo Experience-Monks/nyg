@@ -18,7 +18,7 @@ if (key === '--list' || key === '-l') {
       return { name: cur, value: cur };
     });
     list.choices.push({ name: 'exit', value: 'exit' });
-    inquirer.prompt(list, function(answer) {
+    inquirer.prompt(list).then(function(answer) {
       if (answer.key != 'exit') runGenerator(answer.key);
     });
   } else {
